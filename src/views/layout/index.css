@@ -1,0 +1,13 @@
+.menu {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+}
+
+
+.tabbar .am-tabs-tab-bar-wrap {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}

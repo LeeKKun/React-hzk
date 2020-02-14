@@ -1,14 +1,28 @@
-.container {
-  text-align: center;
+html,
+body {
+    height: 100%;
+    color: #333;
+    background-color: #fff;
 }
 
-.btn {
-  width: 200px;
-  height: 100px;
-  border-radius: 50px;
-  background-color: aquamarine;
+* {
+    touch-action: pan-y;
+    /* touch-action: none; */
+    box-sizing: border-box;
 }
 
-span {
-  margin: 10px;
+#root,
+.App {
+    height: 100%;
+}
+
+ul {
+    list-style: none
+}
+
+p,
+h3,
+ul {
+    padding: 0;
+    margin: 0;
 }
