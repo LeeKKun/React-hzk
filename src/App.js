@@ -8,12 +8,10 @@ import {
 
 import home from './views/layout/index.js'
 
+import citylist from './views/city/index.js'
+
 function login() {
   return <div>登录</div>;
-}
-
-function List() {
-  return <div>主页</div>;
 }
 
 function NotMatch() {
@@ -28,7 +26,7 @@ export default class App extends Component {
           <Redirect exact from="/" to="/home" />
           <Route path="/login" component={login}></Route>
           <Route path="/home" component={home}></Route>
-          <Route path="/citylist" component={List} />
+          <Route path="/citylist" component={citylist} />
           <Route component={NotMatch} />
         </Switch>
       </Router>
