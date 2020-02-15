@@ -33,9 +33,26 @@ const tabItems = [
 ];
 
 class layout extends React.Component {
+  // 控制菜单切换
   state = {
     selectedTab: "index"
   };
+
+  componentDidMount() {
+    // 获取当前路由路径
+    let path = this.props.location.pathname
+    // 截取二级路由路劲
+    let index = path.lastIndexOf('/')
+    // 必须是二级路径
+    if(index !== -1 && index !== 0){
+      let menuindex = path.substr(index + 1)
+      // 跟新当前路径
+      this.setState({
+        selectedTab:menuindex
+      });
+    }
+
+  }
 
   renderTabBarItem() {
     return tabItems.map(item => (
