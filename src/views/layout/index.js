@@ -46,6 +46,10 @@ class layout extends React.Component {
     // 必须是二级路径
     if(index !== -1 && index !== 0){
       let menuindex = path.substr(index + 1)
+      let menus = ['index','find', 'info', 'my']
+      if(menus.includes(menuindex)){
+        menuindex = 'index'
+      }
       // 跟新当前路径
       this.setState({
         selectedTab:menuindex

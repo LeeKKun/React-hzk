@@ -14,10 +14,11 @@ axios.interceptors.response.use(
   }
 );
 
-export default ({ method, url, data }) => {
+export default ({ method, url, data, params }) => {
   return axios({
     method,
     url,
-    data
+    data,
+    params
   });
 };
