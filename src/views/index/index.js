@@ -12,6 +12,8 @@ import nav4 from "../assets/images/nav-4.png";
 
 import { IMG_BASE_URL } from "../utils/config.js";
 
+import getcurrent from '../utils/location'
+
 // axios.defaults.baseURL = "http://localhost:8080";
 
 export default class Index extends Component {
@@ -19,7 +21,8 @@ export default class Index extends Component {
     swiperData: [],
     isloaded: false,
     groupData: [],
-    newsData: []
+    newsData: [],
+    currentCity: ""
   };
 
   // 轮播图数据
@@ -175,10 +178,10 @@ export default class Index extends Component {
     return (
       <NavBar
         mode="dark"
-        icon="北京"
+        icon={this.state.currentCity}
         onLeftClick={() => {
           // 跳转到选择城市页面
-          this.props.history.push('/citylist')
+          this.props.history.push("/citylist");
         }}
         rightContent={[<Icon key="1" type="ellipsis" />]}
       >
@@ -191,6 +194,19 @@ export default class Index extends Component {
     this.loadSwiper();
     this.loadGroup();
     this.loadNews();
+    // 获取当前城市名称
+     getcurrent().then(city => {
+       this.setState({
+        currentCity: city.label
+      });
+     })
+    // let city = localStorage.getItem("hkzf_city");
+    // if (city) {
+    //   city = JSON.parse(city);
+    //   this.setState({
+    //     currentCity: city.label
+    //   });
+    // }
   }
   render() {
     return (
