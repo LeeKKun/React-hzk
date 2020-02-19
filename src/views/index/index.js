@@ -183,7 +183,9 @@ export default class Index extends Component {
           // 跳转到选择城市页面
           this.props.history.push("/citylist");
         }}
-        rightContent={[<Icon key="1" type="ellipsis" />]}
+        rightContent={[<Icon onClick={() => {
+          this.props.history.push('/map')
+        }} key="1" type="ellipsis" />]}
       >
         主页
       </NavBar>

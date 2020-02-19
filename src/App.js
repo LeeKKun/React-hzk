@@ -10,6 +10,8 @@ import home from './views/layout/index.js'
 
 import citylist from './views/city/index.js'
 
+import map from "./views/map/index.js";
+
 function login() {
   return <div>登录</div>;
 }
@@ -27,6 +29,7 @@ export default class App extends Component {
           <Route path="/login" component={login}></Route>
           <Route path="/home" component={home}></Route>
           <Route path="/citylist" component={citylist} />
+          <Route path="/map" component={map} />
           <Route component={NotMatch} />
         </Switch>
       </Router>

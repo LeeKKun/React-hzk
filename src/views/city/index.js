@@ -16,7 +16,7 @@ export default class citylist extends Component {
   };
 
   // 构造函数中添加
-  listRef = React.createRef()
+  listRef = React.createRef();
 
   // 城市列表数据
   loadcity = async () => {
@@ -43,11 +43,14 @@ export default class citylist extends Component {
     ret.cityIndex.unshift("#");
     ret.cityList["#"] = [ccity];
 
-    this.setState({
-      cityList: ret
-    }, () => {
-       this.listRef.current.measureAllRows();
-    })
+    this.setState(
+      {
+        cityList: ret
+      },
+      () => {
+        this.listRef.current.measureAllRows();
+      }
+    );
 
     // 隐藏提示
     Toast.hide();
@@ -127,9 +130,20 @@ export default class citylist extends Component {
           //选中城市跳回到主页
           if (["北京", "上海", "广州", "深圳"].includes(item.label)) {
             // 选中该城市,保存到本地缓存
-            window.localStorage.setItem("hkzf_city", JSON.stringify(item));
-            // 跳回到主页面
-            this.props.history.push("/home");
+            //获取选择城市的经纬度数据(g根据城市名称)
+            let geo = new window.BMap.Geocoder();
+            geo.getPoint(item.label, data => {
+            console.log(data);
+              let info = {
+                label: item.label,
+                value: item.value,
+                lng: data && data.lng,
+                lat: data && data.lat
+              };
+              window.localStorage.setItem("hkzf_city", JSON.stringify(info));
+              // 跳回到主页面
+              this.props.history.push("/home");
+            },'中国');
           } else {
             // 提示一下即可
             Toast.info("只支持一线城市", 1);
@@ -189,8 +203,8 @@ export default class citylist extends Component {
     // console.log('startIndex：', startIndex)
     if (this.state.activeIndex !== startIndex) {
       // 跳转不到z解决方案
-      if(startIndex === 19){
-        startIndex = 20
+      if (startIndex === 19) {
+        startIndex = 20;
       }
       this.setState({
         activeIndex: startIndex

@@ -1,0 +1,21 @@
+.map-overlay {
+  width: 70px;
+  height: 70px;
+  border-radius: 35px;
+  text-align: center;
+  color: #fff;
+  background-color: green;
+  padding-top: 8px;
+  div {
+    height: 25px;
+    line-height: 25px;
+  }
+}
+.map-overlay-second {
+  background-color: orange;
+}
+.map-overlay-area {
+  background-color: green;
+  color: #fff;
+  padding: 5px;
+}
