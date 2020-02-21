@@ -6,10 +6,13 @@ import { NavBar, Icon } from "antd-mobile";
 import "./index.scss";
 import getCurrentCity from "../utils/location.js";
 import request from "../utils/api.js";
+import { IMG_BASE_URL } from "../utils/config";
 
 class MapFind extends React.Component {
   state = {
-    mapData: []
+    mapData: [],
+    houseList: [],
+    isShow: false
   };
 
   // 调用后台接口获取所有的聚合数据
@@ -116,7 +119,7 @@ class MapFind extends React.Component {
     }
     let label = new window.BMap.Label(overInfo, opts);
     // 给覆盖物绑定事件
-    label.addEventListener("click", () => {
+    label.addEventListener("click", e => {
       if (type === "first") {
         // 点击一级覆盖物，就绘制二级覆盖物
         this.drawSecondOverlay(data, point, map);
@@ -125,7 +128,22 @@ class MapFind extends React.Component {
         this.drawThirdOverlay(data, point, map);
       } else if (type === "third") {
         // 点击三级覆盖物，展示房源列表
-        console.log("list");
+        this.getHouseList(data.value);
+
+        // 计算地图移动的距离（x, y）
+        // 3-1、地图中心点坐标
+        let x0 = window.innerWidth / 2;
+        let y0 = (window.innerHeight - 330) / 2;
+        // 3-2、鼠标点击位置的坐标
+        let x1 = e.changedTouches[0].clientX;
+        let y1 = e.changedTouches[0].clientY;
+        // 3-3、调用地图API控制地图移动
+        map.panBy(x0 - x1, y0 - y1);
+
+        this.setState({
+          // 获取数据并显示房源列表
+          isShow: true
+        });
       }
     });
     // 调整默认的覆盖物样式
@@ -135,6 +153,66 @@ class MapFind extends React.Component {
     });
     // 把地图覆盖物添加到地图中
     map.addOverlay(label);
+  };
+
+  // 封装获取房源列表数据的方法
+  getHouseList = async id => {
+    let res = await request({
+      method: "get",
+      url: "houses",
+      params: {
+        cityId: id
+      }
+    });
+    this.setState({
+      houseList: res.body.list
+    });
+  };
+
+  // 封装渲染房源列表方法
+  rendrhouselist = () => {
+    const listTag = this.state.houseList.map(item => (
+      <div key={item.houseCode} className="house">
+        <div className="img-wrap">
+          <img className="img" src={IMG_BASE_URL + item.houseImg} alt="" />
+        </div>
+        <div className="content">
+          <h3 className="title">{item.title}</h3>
+          <div className="desc">{item.desc}</div>
+          <div>
+            <span className="tag1">
+              {item.tags.map((item, index) => {
+                let tagCls = "tag" + (index + 1);
+                return (
+                  <span key={index} className={["tag", tagCls].join(" ")}>
+                    {item}
+                  </span>
+                );
+              })}
+            </span>
+          </div>
+          <div className="price">
+            <span className="price-num">{item.price}</span> 元/月
+          </div>
+        </div>
+      </div>
+    ));
+    return (
+      <div
+        className={["house-list", this.state.isShow ? "show" : ""].join(" ")}
+      >
+        <div className="title-wrap">
+          <h1 className="list-title">房屋列表</h1>
+          <a className="title-more" href="/house/list">
+            更多房源
+          </a>
+        </div>
+        <div className="house-items">
+          {/*这里是房源列表*/}
+          {listTag}
+        </div>
+      </div>
+    );
   };
 
   // 初始化地图
@@ -147,10 +225,17 @@ class MapFind extends React.Component {
     let city = await getCurrentCity();
     // 创建点坐标
     let point = new window.BMap.Point(city.lng, city.lat);
-    
+
     // 批量绘制所有一级覆盖物
     this.drawFirstOverlay(point, map);
 
+    // 监听地图的移动行为
+    map.addEventListener("movestart", () => {
+      // 地图移动时，隐藏房源列表
+      this.setState({
+        isShow: false
+      });
+    });
     // let label = new window.BMap.Label("覆盖物", opts);
   };
 
@@ -180,6 +265,9 @@ class MapFind extends React.Component {
           地图找房
         </NavBar>
         <div style={{ height: "100%" }} id="mymap"></div>
+
+        {/* 房源列表 */}
+        {this.rendrhouselist()}
       </div>
     );
   }

@@ -40,23 +40,20 @@ class layout extends React.Component {
 
   componentDidMount() {
     // 获取当前路由路径
-    let path = this.props.location.pathname
+    let path = this.props.location.pathname;
     // 截取二级路由路劲
-    let index = path.lastIndexOf('/')
+    let index = path.lastIndexOf("/");
     // 必须是二级路径
-    if(index !== -1 && index !== 0){
-      let menuindex = path.substr(index + 1)
-      let menus = ['index','find', 'info', 'my']
-      if(menus.includes(menuindex)){
-        menuindex = 'index'
-      }
+    if (index !== -1 && index !== 0) {
+      let menuindex = path.substr(index + 1);
       // 跟新当前路径
       this.setState({
-        selectedTab:menuindex
+        selectedTab: menuindex
       });
     }
-
   }
+
+  // 动态生成菜单
 
   renderTabBarItem() {
     return tabItems.map(item => (
