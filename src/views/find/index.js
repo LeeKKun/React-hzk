@@ -3,10 +3,13 @@ import { Flex } from "antd-mobile";
 import "./index.scss";
 import getCurrentCity from "../utils/location";
 import Filter from "./components/Filter/index";
+import request from '../utils/api'
 
 export default class Find extends Component {
   state = {
-    currentCity: ""
+    currentCity: "",
+    count: 0,
+    list: []
   };
 
   componentDidMount() {
@@ -17,6 +20,26 @@ export default class Find extends Component {
       });
     });
   }
+
+  // 获取筛选条件参数
+  onFilter = async filter => {
+    // 调用后台接口发送请求
+    let city = await getCurrentCity();
+    let res = await request({
+      method: "get",
+      url: "houses",
+      params: {
+        ...filter,
+        cityId: city.value,
+        start: 1,
+        end: 10
+      }
+    });
+    this.setState({
+      count: res.body.count,
+      list: res.body.list
+    });
+  };
 
   render() {
     return (
@@ -43,9 +66,9 @@ export default class Find extends Component {
             <i className="iconfont icon-map" />
           </Flex>
         </Flex>
-      
+
         {/* 筛选菜单 */}
-        <Filter/>
+        <Filter onFilter={this.onFilter} />
       </div>
     );
   }

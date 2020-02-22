@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 import styles from './index.module.css'
 
-function FilterFooter({ className, style, onCancel }) {
+function FilterFooter({ className, style, onCancel, onSave }) {
   return (
     <Flex style={style} className={[styles.root, className || ""].join(" ")}>
       {/* 取消按钮 */}
@@ -17,7 +17,9 @@ function FilterFooter({ className, style, onCancel }) {
       </span>
 
       {/* 确定按钮 */}
-      <span className={[styles.btn, styles.ok].join(" ")}>确定</span>
+      <span onClick={onSave} className={[styles.btn, styles.ok].join(" ")}>
+        确定
+      </span>
     </Flex>
   );
 }
