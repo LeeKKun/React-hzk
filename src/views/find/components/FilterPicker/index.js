@@ -16,6 +16,17 @@ export default class FilterPicker extends Component {
     });
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    // 该生命周期函数触发条件：组件的相关数据（props和state）发生变化
+    // 如果父组件defaultValue的props值发生变化时，手动进行更新
+    // 必须添加条件判断：只有对应的值更新后才触发状态变更动作
+    if (prevProps.defaultValue !== this.props.defaultValue) {
+      this.setState({
+        value: this.props.defaultValue
+      });
+    }
+  }
+
   render() {
     return (
       <>

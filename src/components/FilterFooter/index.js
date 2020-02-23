@@ -1,9 +1,9 @@
-import React from 'react'
+import React from "react";
 
-import { Flex } from 'antd-mobile'
-import PropTypes from 'prop-types'
+import { Flex } from "antd-mobile";
+import PropTypes from "prop-types";
 
-import styles from './index.module.css'
+import styles from "./index.module.css";
 
 function FilterFooter({ className, style, onCancel, onSave }) {
   return (
@@ -28,6 +28,6 @@ function FilterFooter({ className, style, onCancel, onSave }) {
 FilterFooter.propTypes = {
   className: PropTypes.string,
   style: PropTypes.object
-}
+};
 
-export default FilterFooter
+export default FilterFooter;

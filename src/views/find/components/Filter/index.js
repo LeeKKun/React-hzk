@@ -53,7 +53,13 @@ export default class Filter extends Component {
     if (!type) {
       return;
     }
-   
+    // let newMenuStatus = {...this.state.menuStatus}
+    // // 把对应菜单修改为高亮状态
+    // newMenuStatus[type] = !newMenuStatus[type]
+    // this.setState({
+    //   menuStatus: newMenuStatus
+    // })
+    // -----------------------------
     // 判断菜单是否高亮
     const { menuValue, menuStatus, openType } = this.state;
     // 复制一份状态数据
@@ -110,18 +116,43 @@ export default class Filter extends Component {
 
   // 关闭下拉列表
   onCancel = () => {
+    // 点击取消按钮控制当前菜单高亮
+    let { menuValue, menuStatus, openType } = this.state;
+    let newMenuStatus = { ...menuStatus };
+    // 获取当前条件的值
+    let v = menuValue[openType];
+    if (v && v.length > 0 && v[0] !== "null") {
+      // 已经选中了值，高亮
+      newMenuStatus[openType] = true;
+    } else {
+      newMenuStatus[openType] = false;
+    }
     this.setState({
+      menuStatus: newMenuStatus,
       openType: ""
     });
   };
 
   // 获取下拉列表值并隐藏弹窗
   onSave = (type, value) => {
+    // 点击确定按钮控制菜单高亮
+    const { menuValue, menuStatus } = this.state;
+    let newMenuStatus = { ...menuStatus };
+    // 判断是否选中了值
+    if (value && value.length > 0 && value[0] !== "null") {
+      // 已经选中
+      newMenuStatus[type] = true;
+    } else {
+      // 没有选中
+      newMenuStatus[type] = false;
+    }
+
     this.setState(
       {
         openType: "",
         menuValue: {
           ...this.state.menuValue,
+          menuStatus: newMenuStatus,
           [type]: value
         }
       },
@@ -140,7 +171,7 @@ export default class Filter extends Component {
             filter[keyName] = keyValue[2];
           }
         }
-      
+
         // 2、出租方式
         if (
           menuValue.mode &&

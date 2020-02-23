@@ -212,7 +212,7 @@ export default class Index extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="tabbar menu">
         {/* 顶部导航 */}
         {this.renderhome()}
 

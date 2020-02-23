@@ -1,15 +1,23 @@
 import React, { Component } from "react";
-import { Flex } from "antd-mobile";
+import { Flex, WingBlank } from "antd-mobile";
 import "./index.scss";
 import getCurrentCity from "../utils/location";
 import Filter from "./components/Filter/index";
-import request from '../utils/api'
+import request from "../utils/api";
+import {
+  List,
+  AutoSizer,
+  WindowScroller,
+  InfiniteLoader
+} from "react-virtualized";
+import HouseItem from "../../components/HouseItem/index";
 
 export default class Find extends Component {
   state = {
     currentCity: "",
     count: 0,
-    list: []
+    list: [],
+    filter: {}
   };
 
   componentDidMount() {
@@ -19,31 +27,85 @@ export default class Find extends Component {
         currentCity: res.label
       });
     });
+    // 页面首次加载调用一次接口
+    // this.onFilter({});
+    this.loadMoreRows({
+      startIndex: 1,
+      stopIndex: 10
+    });
   }
+
+  // 渲染其中一条数据
+  rowRenderer = ({ style, key, index }) => {
+    // return <div style={style} key={key}>{'测试数据' + index}</div>
+    // 如何获取当前列表数据？
+    let { list } = this.state;
+    let itemData = list[index];
+    return <HouseItem key={key} style={style} {...itemData} />;
+    // return <div style={style} key={key}>{'测试数据' + index}</div>
+  };
+
+  // 用于跟踪列表每一行数据的加载状态
+  isRowLoaded = ({ index }) => {
+    const { list } = this.state;
+    // 双叹号用于转化为布尔值
+    return !!list[index];
+  };
+
+  // 用于跟踪列表每一行数据的加载状态
+  isRowLoaded = ({ index }) => {
+    const { list } = this.state;
+    // 双叹号用于转化为布尔值
+    return !!list[index];
+  };
+  // 用于加载下一页数据
+  loadMoreRows = async ({ startIndex, stopIndex }) => {
+    console.log(startIndex, stopIndex);
+    // 这里负责调用后台接口获取分页数据
+    // 返回的数据结果需要提供Promise对象
+    let city = await getCurrentCity();
+    return request({
+      method: "get",
+      url: "houses",
+      params: {
+        ...this.state.filter,
+        cityId: city.value,
+        start: startIndex,
+        end: stopIndex
+      }
+    }).then(res => {
+      // 获取后台接口数据
+      this.setState({
+        count: res.body.count,
+        // 列表数据不应该覆盖，而是要合并
+        list: [...this.state.list, ...res.body.list]
+      });
+    });
+  };
 
   // 获取筛选条件参数
   onFilter = async filter => {
     // 调用后台接口发送请求
-    let city = await getCurrentCity();
-    let res = await request({
-      method: "get",
-      url: "houses",
-      params: {
-        ...filter,
-        cityId: city.value,
-        start: 1,
-        end: 10
+    // 修改筛选条件后，需要清空之前的数据，然后重新加载新的数据
+    this.setState(
+      {
+        filter: filter,
+        count: 0,
+        list: []
+      },
+      () => {
+        // 重新加载新的数据
+        this.loadMoreRows({
+          startIndex: 1,
+          stopIndex: 10
+        });
       }
-    });
-    this.setState({
-      count: res.body.count,
-      list: res.body.list
-    });
+    );
   };
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         {/* //顶部搜索栏 */}
         <Flex className="header">
           <i className="iconfont icon-back" />
@@ -69,7 +131,43 @@ export default class Find extends Component {
 
         {/* 筛选菜单 */}
         <Filter onFilter={this.onFilter} />
-      </div>
+
+        {/* 房源列表 */}
+        {this.state.list.length > 0 && (
+          <InfiniteLoader
+            isRowLoaded={this.isRowLoaded}
+            loadMoreRows={this.loadMoreRows}
+            rowCount={this.state.count}
+          >
+            {({ onRowsRendered, registerChild }) => (
+              <WindowScroller>
+                {({ height, isScrolling, onChildScroll, scrollTop }) => (
+                  <AutoSizer>
+                    {({ width }) => {
+                      return (
+                        <List
+                          autoHeight
+                          className="houseList"
+                          isScrolling={isScrolling}
+                          onScroll={onChildScroll}
+                          scrollTop={scrollTop}
+                          onRowsRendered={onRowsRendered}
+                          ref={registerChild}
+                          width={width}
+                          height={height}
+                          rowCount={this.state.list.length}
+                          rowHeight={120}
+                          rowRenderer={this.rowRenderer}
+                        />
+                      );
+                    }}
+                  </AutoSizer>
+                )}
+              </WindowScroller>
+            )}
+          </InfiniteLoader>
+        )}
+      </React.Fragment>
     );
   }
 }

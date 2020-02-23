@@ -78,7 +78,7 @@ class layout extends React.Component {
 
   render() {
     return (
-      <div className="tabbar menu">
+      <React.Fragment>
         {/* 菜单相应显示内容的填充位 */}
         <Switch>
           <Redirect exact from="/home" to="/home/index" />
@@ -96,7 +96,7 @@ class layout extends React.Component {
         >
           {this.renderTabBarItem()}
         </TabBar>
-      </div>
+      </React.Fragment>
     );
   }
 }
