@@ -64,3 +64,26 @@
 .houseList {
   padding-bottom: 50px;
 }
+
+.loading {
+  height: 120px;
+  background-color: #f6f5f6;
+}
+
+.scrollAuto{
+  overflow:hidden;
+}
+
+.toTop {
+  position: fixed;
+  width: 50px;
+  border-radius: 25px;
+  line-height: 50px;
+  text-align: center;
+  color: #fff;
+  font-size: 30px;
+  height: 50px;
+  right: 10px;
+  bottom: 60px;
+  background: rgba(0, 0, 0, 0.2)
+}

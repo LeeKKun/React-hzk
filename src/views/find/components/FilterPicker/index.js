@@ -4,6 +4,8 @@ import { PickerView } from "antd-mobile";
 
 import FilterFooter from "../../../../components/FilterFooter/index";
 
+import styles from './index.module.css'
+
 export default class FilterPicker extends Component {
   state = {
     value: this.props.defaultValue ? this.props.defaultValue : []
@@ -29,7 +31,7 @@ export default class FilterPicker extends Component {
 
   render() {
     return (
-      <>
+      <div className={styles.condition}>
         {/* 选择器组件： */}
         <PickerView
           onChange={this.handleChange}
@@ -45,7 +47,7 @@ export default class FilterPicker extends Component {
           }}
           onCancel={this.props.onCancel}
         />
-      </>
+      </div>
     );
   }
 }

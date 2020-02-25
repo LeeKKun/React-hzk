@@ -6,8 +6,11 @@ import FilterMore from "../FilterMore";
 import request from "../../../utils/api.js";
 import styles from "./index.module.css";
 import getCurrentCity from "../../../utils/location.js";
+import Sticky from "../../../../components/Sticky/index"
 
 export default class Filter extends Component {
+  bodyDOM = null;
+
   state = {
     // 保存选中的所有的条件值
     menuValue: {
@@ -46,6 +49,8 @@ export default class Filter extends Component {
 
   componentDidMount() {
     this.loadData();
+    // componentDidMount
+    this.bodyDOM = window.document.body;
   }
 
   // 修改高亮状态
@@ -53,6 +58,8 @@ export default class Filter extends Component {
     if (!type) {
       return;
     }
+    // onTitleClick
+    this.bodyDOM.className = "scrollAuto";
     // let newMenuStatus = {...this.state.menuStatus}
     // // 把对应菜单修改为高亮状态
     // newMenuStatus[type] = !newMenuStatus[type]
@@ -116,6 +123,8 @@ export default class Filter extends Component {
 
   // 关闭下拉列表
   onCancel = () => {
+    // onCancel onSave
+    this.bodyDOM.className = "";
     // 点击取消按钮控制当前菜单高亮
     let { menuValue, menuStatus, openType } = this.state;
     let newMenuStatus = { ...menuStatus };
@@ -135,6 +144,8 @@ export default class Filter extends Component {
 
   // 获取下拉列表值并隐藏弹窗
   onSave = (type, value) => {
+    // onCancel onSave
+    this.bodyDOM.className = "";
     // 点击确定按钮控制菜单高亮
     const { menuValue, menuStatus } = this.state;
     let newMenuStatus = { ...menuStatus };
@@ -292,10 +303,10 @@ export default class Filter extends Component {
 
         <div className={styles.content}>
           {/* 标题栏 */}
-          <FilterTitle
-            changeStatus={this.changeStatus}
-            menuStatus={this.state.menuStatus}
-          />
+            <FilterTitle
+              changeStatus={this.changeStatus}
+              menuStatus={this.state.menuStatus}
+            />
 
           {/* 前三个菜单对应的内容：下拉列表 */}
           {this.renderFilterPicker()}

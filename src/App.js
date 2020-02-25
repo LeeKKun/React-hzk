@@ -12,9 +12,11 @@ import citylist from './views/city/index.js'
 
 import map from "./views/map/index.js";
 
-function login() {
-  return <div>登录</div>;
-}
+import detail from "./views/detail/index";
+
+import Login from "./views/Login/index";
+
+
 
 function NotMatch() {
   return <div>页面不见了</div>;
@@ -26,8 +28,9 @@ export default class App extends Component {
       <Router>
         <Switch>
           <Redirect exact from="/" to="/home" />
-          <Route path="/login" component={login}></Route>
+          <Route path="/login" component={Login}></Route>
           <Route path="/home" component={home}></Route>
+          <Route path="/detail" component={detail}></Route>
           <Route path="/citylist" component={citylist} />
           <Route path="/map" component={map} />
           <Route component={NotMatch} />
