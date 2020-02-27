@@ -2,8 +2,8 @@
 
 import axios from "axios";
 // 基准路径
-axios.defaults.baseURL = "http://localhost:8080";
-
+// axios.defaults.baseURL = "http://localhost:8080";
+axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
 // 封装响应拦截器
 axios.interceptors.response.use(
   function(response) {

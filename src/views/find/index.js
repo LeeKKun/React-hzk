@@ -4,17 +4,22 @@ import "./index.scss";
 import getCurrentCity from "../utils/location";
 import Filter from "./components/Filter/index";
 import request from "../utils/api";
-import {
-  List,
-  AutoSizer,
-  WindowScroller,
-  InfiniteLoader
-} from "react-virtualized";
+// import {
+//   List,
+//   AutoSizer,
+//   WindowScroller,
+//   InfiniteLoader
+// } from "react-virtualized";
 import HouseItem from "../../components/HouseItem/index";
 
 import NoHouse from "../../components/NoHouse/index";
 
 import Sticky from "../../components/Sticky/index";
+
+import List from "react-virtualized/dist/commonjs/List";
+import AutoSizer from "react-virtualized/dist/commonjs/AutoSizer";
+import WindowScroller from "react-virtualized/dist/commonjs/WindowScroller";
+import InfiniteLoader from "react-virtualized/dist/commonjs/InfiniteLoader";
 
 export default class Find extends Component {
   state = {

@@ -2,9 +2,12 @@
 import React, { Component } from "react";
 import { NavBar, Icon, Toast } from "antd-mobile";
 import request from "../utils/api.js";
-import { List, AutoSizer } from "react-virtualized";
+// import { List, AutoSizer } from "react-virtualized";
 import "./index.scss";
 import getcurrent from "../utils/location";
+
+import List from "react-virtualized/dist/commonjs/List";
+import AutoSizer from "react-virtualized/dist/commonjs/AutoSizer";
 
 const list = Array.from(new Array(50)).map((item, index) => `第${index}行数据`);
 console.log(list);

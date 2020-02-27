@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Suspense } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -6,17 +6,11 @@ import {
   Switch
 } from "react-router-dom";
 
-import home from './views/layout/index.js'
-
-import citylist from './views/city/index.js'
-
-import map from "./views/map/index.js";
-
-import detail from "./views/detail/index";
-
-import Login from "./views/Login/index";
-
-
+const home = React.lazy(() => import("./views/layout/index.js"));
+const citylist = React.lazy(() => import("./views/city/index.js"));
+const map = React.lazy(() => import("./views/map/index.js"));
+const detail = React.lazy(() => import("./views/detail/index"));
+const Login = React.lazy(() => import("./views/Login/index"));
 
 function NotMatch() {
   return <div>页面不见了</div>;
@@ -26,15 +20,17 @@ export default class App extends Component {
   render() {
     return (
       <Router>
-        <Switch>
-          <Redirect exact from="/" to="/home" />
-          <Route path="/login" component={Login}></Route>
-          <Route path="/home" component={home}></Route>
-          <Route path="/detail" component={detail}></Route>
-          <Route path="/citylist" component={citylist} />
-          <Route path="/map" component={map} />
-          <Route component={NotMatch} />
-        </Switch>
+        <Suspense fallback={<div>loading...</div>}>
+          <Switch>
+            <Redirect exact from="/" to="/home" />
+            <Route path="/login" component={Login}></Route>
+            <Route path="/home" component={home}></Route>
+            <Route path="/detail" component={detail}></Route>
+            <Route path="/citylist" component={citylist} />
+            <Route path="/map" component={map} />
+            <Route component={NotMatch} />
+          </Switch>
+        </Suspense>
       </Router>
     );
   }
